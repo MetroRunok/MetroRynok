@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МетроРынок</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0f0f0f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* 🔷 Шапка */
+    header {
+      background: linear-gradient(to right, var(--dark-color), var(--light-color));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      transition: background 0.5s;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .slogan {
+      font-size: 0.9em;
+      color: #e0e0ff;
+    }
+
+    nav button {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      margin-left: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    nav button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Разделы */
+    section {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    h2 {
+      color: #90a0f9;
+    }
+
+    /* Форма */
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      background: #222;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 6px;
+    }
+
+    button[type="submit"] {
+      background: #0066ff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background: #0055cc;
+    }
+
+    /* 🔸 Товары */
+    .item {
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #141414;
+    }
+
+    .broken { border-color: gray; }
+    .repaired { border-color: green; }
+    .normal { border-color: blue; }
+    .improved { border-color: purple; }
+    .high { border-color: pink; }
+    .gold { border-color: gold; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+    }
+
+    .img-preview {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header id="mainHeader">
+    <div class="logo">
+      <h1>МетроРынок</h1>
+      <div class="slogan">Быстрый обмен по всей игре</div>
+    </div>
+    <nav>
+      <button onclick="showSection('market')">Товары</button>
+      <button onclick="showSection('publish')">Опубликовать</button>
+      <button onclick="showSection('about')">О нас</button>
+    </nav>
+  </header>
+
+  <section id="market">
+    <h2>Товары</h2>
+    <div id="itemsList">Загрузка товаров...</div>
+  </section>
+
+  <section id="publish" style="display:none;">
+    <h2>Опубликовать товар</h2>
+    <form id="publishForm">
+      <label>Название предмета:</label>
+      <input type="text" id="itemName" placeholder="Введите название" required>
+
+      <label>Редкость:</label>
+      <select id="itemRarity">
+        <option>Поломанная</option>
+        <option>Отремонтированная</option>
+        <option>Целая</option>
+        <option>Улучшенная</option>
+        <option>Высшее качество</option>
+        <option>Золотое качество</option>
+      </select>
+
+      <label>Уровень брони:</label>
+      <select id="itemLevel">
+        <option>1 уровень</option>
+        <option>2 уровень</option>
+        <option>3 уровень</option>
+        <option>4 уровень</option>
+        <option>5 уровень</option>
+        <option>6 уровень</option>
+      </select>
+
+      <label>Цена:</label>
+      <input type="text" id="itemPrice" placeholder="Введите цену">
+
+      <label>Способ связи:</label>
+      <input type="text" id="itemContact" placeholder="Например: @nickname или номер">
+
+      <label>Фото предмета (ссылка):</label>
+      <input type="text" id="itemImage" placeholder="Вставьте URL изображения">
+
+      <button type="submit">Опубликовать</button>
+    </form>
+  </section>
+<section id="about" style="display:none;">
+    <h2>О нас</h2>
+    <p>Этот проект создан для удобства обмена между игроками режима Metro Royal.</p>
+  </section>
+
+  <footer>© МетроРынок — 2025</footer>
+
+  <script>
+    const SERVER_URL = "https://metro-rynok.onrender.com"; // ← замени на свой Render URL
+    const header = document.getElementById("mainHeader");
+
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+      document.getElementById(id).style.display = "block";
+
+      if (id === "market") {
+        header.style.setProperty("--dark-color", "#001144");
+        header.style.setProperty("--light-color", "#0088ff");
+        loadItems();
+      } else if (id === "about") {
+        header.style.setProperty("--dark-color", "#330055");
+        header.style.setProperty("--light-color", "#aa44ff");
+      } else if (id === "publish") {
+        header.style.setProperty("--dark-color", "#004422");
+        header.style.setProperty("--light-color", "#00cc66");
+      }
+    }
+
+    header.style.setProperty("--dark-color", "#001144");
+    header.style.setProperty("--light-color", "#0088ff");
+
+    // 🔄 Загрузка товаров
+    async function loadItems() {
+      const list = document.getElementById("itemsList");
+      list.innerHTML = "Загрузка товаров...";
+      try {
+        const res = await fetch(${SERVER_URL}/items);
+        const data = await res.json();
+        list.innerHTML = "";
+        if (data.length === 0) {
+          list.innerHTML = "<p>Пока нет опубликованных товаров.</p>";
+          return;
+        }
+        data.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "item " + getRarityClass(item.rarity);
+          div.innerHTML = 
+            <b>${item.name}</b><br>
+            Редкость: ${item.rarity}<br>
+            Уровень: ${item.level}<br>
+            Цена: ${item.price}<br>
+            Контакт: ${item.contact}<br>
+            ${item.image ? <img src="${item.image}" class="img-preview"> : ""}
+          ;
+          list.appendChild(div);
+        });
+      } catch (err) {
+        list.innerHTML = "Ошибка загрузки товаров.";
+      }
+    }
+
+    // 📤 Отправка нового товара
+    document.getElementById("publishForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newItem = {
+        name: document.getElementById("itemName").value,
+        rarity: document.getElementById("itemRarity").value,
+        level: document.getElementById("itemLevel").value,
+        price: document.getElementById("itemPrice").value,
+        contact: document.getElementById("itemContact").value,
+        image: document.getElementById("itemImage").value,
+        owner_id: "guest"
+      };
+
+      try {
+        await fetch(${SERVER_URL}/items, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newItem)
+        });
+        alert("✅ Товар опубликован!");
+        showSection("market");
+      } catch (err) {
+        alert("❌ Ошибка при публикации.");
+      }
+    });
+
+    function getRarityClass(rarity) {
+      switch (rarity) {
+        case "Поломанная": return "broken";
+        case "Отремонтированная": return "repaired";
+        case "Целая": return "normal";
+        case "Улучшенная": return "improved";
+        case "Высшее качество": return "high";
+        case "Золотое качество": return "gold";
+        default: return "";
+      }
+    }
+
+    loadItems();
+  </script>
+</body>
+</html>
